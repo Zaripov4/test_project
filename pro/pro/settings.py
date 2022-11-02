@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY='django-insecure-%p_f3uh3!&yc=@a+-u_+w-9(q@(l_b3b81mox*mdh#*%08j&v6'
-
+SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['ENV'].lower() in ['dev', 'test', 'local']
 
 ALLOWED_HOSTS = ['*']
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account', 
     'rest_framework',
     'rest_framework_simplejwt',
+    'photo',
 ]
 
 MIDDLEWARE = [
@@ -86,16 +87,12 @@ SIMPLE_JWT = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "HOST": 'localhost',
-        "NAME": 'test_project',
-        "USER": 'postgres',
-        "PASSWORD": '1234',
-        "PORT": 5432,
+        "HOST": os.environ['DB_HOST'],
+        "NAME": os.environ['DB_NAME'],
+        "USER": os.environ['DB_USER'],
+        "PASSWORD": os.environ['DB_PASS'],
+        "PORT": os.environ['DB_PORT'],
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
 }
 
 
@@ -125,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'uz-uz'
+LANGUAGE_CODE = 'en-en'
 
 TIME_ZONE = 'UTC'
 
