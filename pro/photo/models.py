@@ -1,16 +1,16 @@
+from email.policy import default
+from pyexpat import model
+from tkinter.messagebox import NO
+from tokenize import blank_re
 from django.db import models
 
-IMAGE_ALBUM = (
-    ('Album1', 'Album1'),
-    ('Album2', 'Album2'),
-    ('Album3', 'Album3'),
-    ('Album4', 'Album4'),
-    )
+class Album(models.Model):
+    title = models.CharField(null=True, blank=True, max_length=200)
+    date_created = models.DateTimeField(blank=True)
+    last_updated = models.DateTimeField(blank=True)
 
 class Image(models.Model):
-    image_album = models.CharField(
-        choices=IMAGE_ALBUM, max_length=20, default='1'
-        )
-    image_content = models.ImageField(
-        upload_to='static/images', default=None
-        )
+    image = models.ManyToManyField(Album)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+    image_content = models.ImageField(upload_to='static/images', default=None)
