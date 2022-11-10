@@ -3,16 +3,10 @@ from .models import Image, Album
 
 
 class AlbumSerializer(serializers.ModelSerializer):
+    image_count = serializers.IntegerField()
     class Meta:
         model = Album
         fields = '__all__'
-
-class AlbumListSerializer(AlbumSerializer):
-    image_count = serializers.SerializerMethodField()
-
-    def get_image_count(self, obj):
-        return obj.image_set.count()
-
 
 class ImageCreateSerializer(serializers.ModelSerializer):
     class Meta:

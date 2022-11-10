@@ -1,6 +1,6 @@
 from .models import Image, Album
 from rest_framework import viewsets
-from .serializers import ImageCreateSerializer, AlbumSerializer, ImageListSerializer, AlbumListSerializer
+from .serializers import ImageCreateSerializer, AlbumSerializer, ImageListSerializer
 
 class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
@@ -15,11 +15,5 @@ class ImageGalleryViewSet(viewsets.ModelViewSet):
 class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
-    
-    def get_serializer_class(self):
-        self.serializer_class = AlbumListSerializer
-        if self.action == 'create':
-            self.serializer_class = AlbumSerializer
-
-        return super().get_serializer_class()
+        
 
