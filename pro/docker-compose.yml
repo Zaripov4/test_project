@@ -4,6 +4,8 @@ services:
   database:
     image: postgres:14.5
     restart: on-failure
+    ports:
+      - "5555:5432"
     volumes:
       - gallery_db:/var/lib/postgresql/data/
     environment:

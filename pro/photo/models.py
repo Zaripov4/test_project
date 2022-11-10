@@ -9,6 +9,10 @@ class Album(models.Model):
     @property
     def image_count(self):
         return self.image_set.count()
+    
+    @property
+    def image_view(self):
+        return self.image_set.all()
 
 class Image(models.Model):
     album = models.ManyToManyField(Album, related_name='image_set', blank=True)

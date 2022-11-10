@@ -2,15 +2,30 @@ from rest_framework import serializers
 from .models import Image, Album
 
 
+class ImageMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ('content', )
+
+
 class AlbumSerializer(serializers.ModelSerializer):
     image_count = serializers.IntegerField()
+    image_view = ImageMinimalSerializer(many=True)
     class Meta:
         model = Album
         fields = [
             'title', 
             'id',
             'image_count',
+            'image_view',
         ]
+
+
+class AlbumListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = ('id', 'title')
+
 
 class ImageCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,4 +37,4 @@ class ImageCreateSerializer(serializers.ModelSerializer):
         ]
 
 class ImageListSerializer(ImageCreateSerializer):
-    album = AlbumSerializer(many=True, required=False)
+    album = AlbumListSerializer(many=True, required=False)
