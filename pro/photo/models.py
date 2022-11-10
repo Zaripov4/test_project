@@ -6,6 +6,6 @@ class Album(models.Model):
     def __str__(self):
         return self.title
 
-class Image(Album):
-    album = models.ManyToManyField(Album, related_name='image_set')
+class Image(models.Model):
+    album = models.ManyToManyField(Album, related_name='image_set', blank=True)
     content = models.ImageField(upload_to='static/images', default=None)
