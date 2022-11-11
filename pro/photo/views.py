@@ -1,27 +1,22 @@
-from .models import Image
+from .models import Image, Album
 from rest_framework import viewsets
-from .serializers import ImageSerializer
-from rest_framework.response import Response
+from .serializers import ImageCreateSerializer, AlbumSerializer, ImageListSerializer
+from .pagination import AlbumPagination
 
 class ImageGalleryViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
-    serializer_class = ImageSerializer
+    pagination_class = AlbumPagination
 
-    def retrieve(self, request, *args, **kwargs):
-        params = kwargs
-        params_list = params['pk']
+    def get_serializer_class(self):
+        self.serializer_class = ImageListSerializer
+        if self.action in ['create', 'update', 'partial_update']:
+            self.serializer_class = ImageCreateSerializer
+        return super().get_serializer_class()
+
+
+class AlbumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+    pagination_class = AlbumPagination
         
-        try:
-            params_list = int(params_list)
-            queryset = Image.objects.get(id=int(params_list))
-            serializer = ImageSerializer(queryset)
-        
-        except:  
-            if params_list == 'all':
-                queryset = Image.objects.all().order_by('-id')
-            else:
-                queryset = Image.objects.filter(ImageAlbum=params_list).\
-                order_by('-id')
-            serializer = ImageSerializer(queryset, many=True)
-        
-        return Response(serializer.data)
+
