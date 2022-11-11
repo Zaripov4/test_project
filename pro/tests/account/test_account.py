@@ -1,5 +1,4 @@
 import pytest
-
 from account.models import User
 
 pytestmark = pytest.mark.django_db
@@ -10,6 +9,7 @@ USER_PAYLOAD = {
     'password': 'supersecret',
 }
 
+
 class TestUserModel:
     def test_crete_user(self):
         user = User.objects.create_user(**USER_PAYLOAD)
@@ -18,7 +18,7 @@ class TestUserModel:
         assert user.username == USER_PAYLOAD['username']
         assert user.email == USER_PAYLOAD['email']
         assert user.check_password(USER_PAYLOAD['password'])
-    
+
     def test_create_super_user(self):
         user = User.objects.create_superuser(**USER_PAYLOAD)
 
