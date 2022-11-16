@@ -12,13 +12,13 @@ class UserViewSet(viewsets.ModelViewSet):
     model = User
     permission_classes = (IsAuthenticated, )
 
-    def get_permission(self):
-        if self.action in ['activate', 'create']:
-            self.permission_classes[AllowAny]
-        return super(UserViewSet, self).get_permission()
+    def get_permissions(self):
+        if self.action in ['create', 'activate']:
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
     def perform_create(self, serializer):
         super(UserViewSet, self).perform_create(serializer)
         user = serializer.instance
-        user.set_password(serializer.validated_date['password'])
-        user.save(updated_fields=['password'])
+        user.set_password(serializer.validated_data['password'])
+        user.save()
