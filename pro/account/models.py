@@ -1,19 +1,14 @@
-import email
-from email.policy import default
-from enum import unique
-from multiprocessing.dummy import Manager
-from re import T
-from statistics import mode
-from tkinter.tix import Tree
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.translation import gettext_lazy as _
 from rest_framework.validators import ValidationError
 
+
 class BaseManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(deleted_on_isnull=True)
+
 
 class BaseModel(models.Model):
     created_on = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -30,13 +25,14 @@ class BaseModel(models.Model):
     def mark_deleted(self):
         self.deleted_on = timezone.now()
         self.save()
-    
+
     def save(self, *args, **kwargs):
         self.full_clean()
         return super().save(*args, **kwargs)
 
+
 class CustomManager(UserManager):
-     def create_user(self, username, password, **extra_fields):
+    def create_user(self, username, password, **extra_fields):
         if not all([username, password]):
             raise ValidationError(
                 {'detail': 'Required fields: username, password'}
@@ -49,13 +45,14 @@ class CustomManager(UserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
-     def create_superuser(self, password, *args, **kwargs):
+
+    def create_superuser(self, password, *args, **kwargs):
         user = self.create_user(password=password, *args, **kwargs)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
         return user
+
 
 class User(AbstractUser, BaseModel):
     id = models.AutoField(editable=False, primary_key=True)

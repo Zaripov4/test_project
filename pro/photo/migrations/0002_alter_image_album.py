@@ -13,6 +13,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='image',
             name='album',
-            field=models.ManyToManyField(blank=True, related_name='image_set', to='photo.album'),
+            field=models.ManyToManyField(
+                blank=True,
+                related_name='image_set',
+                to='photo.album'),
         ),
     ]
